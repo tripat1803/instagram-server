@@ -20,8 +20,10 @@ import com.tripat.instagram.utils.Role;
 
 import jakarta.servlet.http.HttpServletResponse;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
+@CrossOrigin(origins = {"http://localhost:3000"})
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -51,12 +53,10 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(request.password));
         user.setRole(Role.USER);
         User savedUser = this.userRepository.save(user);
-        String access_token = jwtService.getnerateAccessToken(savedUser);
-        String refresh_token = jwtService.getnerateRefreshToken(savedUser);
-        AuthenticationResponse res = new AuthenticationResponse(access_token, refresh_token);
-        response.addCookie(res.getAccessCookie());
-        response.addCookie(res.getRefreshCookie());
-        return ResponseEntity.ok("");
+        AuthenticationResponse res = new AuthenticationResponse();
+        res.access_token = jwtService.getnerateAccessToken(savedUser);
+        res.refresh_token = jwtService.getnerateRefreshToken(savedUser);
+        return ResponseEntity.ok(res);
     }
 
     @PostMapping("/login")
@@ -64,11 +64,9 @@ public class AuthController {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.email, request.password));
         User user = this.userRepository.findFirstByEmail(request.email);
-        String access_token = jwtService.getnerateAccessToken(user);
-        String refresh_token = jwtService.getnerateRefreshToken(user);
-        AuthenticationResponse res = new AuthenticationResponse(access_token, refresh_token);
-        response.addCookie(res.getAccessCookie());
-        response.addCookie(res.getRefreshCookie());
-        return ResponseEntity.ok("");
+        AuthenticationResponse res = new AuthenticationResponse();
+        res.access_token = jwtService.getnerateAccessToken(user);
+        res.refresh_token = jwtService.getnerateRefreshToken(user);
+        return ResponseEntity.ok(res);
     }
 }
