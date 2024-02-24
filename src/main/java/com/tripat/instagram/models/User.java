@@ -24,7 +24,7 @@ public class User implements UserDetails {
     @Id
     @Column(unique = true, nullable = false)
     @GeneratedValue(generator = "gen")
-    private Long userId;
+    private Long id;
     @Column(unique = true)
     private String username;
     
