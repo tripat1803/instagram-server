@@ -17,7 +17,7 @@ import com.tripat.instagram.repositories.UserRepository;
 @Configuration
 public class ApplicationConfig {
 
-    @Autowired private UserRepository userRepository;
+    @Autowired UserRepository userRepository;
 
     @Bean
     public UserDetailsService userDetailsService(){

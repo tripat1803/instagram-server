@@ -22,8 +22,8 @@ public class SecurityConfig {
         "/api/auth",
         "/api/auth/**",
     };
-    @Autowired private JwtFilter jwtFilter;
-    @Autowired private AuthenticationProvider authProvider;
+    @Autowired JwtFilter jwtFilter;
+    @Autowired AuthenticationProvider authProvider;
     
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

@@ -12,6 +12,7 @@ public class AuthenticationResponse {
         this.access_token = access_token;
         this.refresh_cookie = new Cookie("x-auth-rt", refresh_token);
         this.refresh_cookie.setHttpOnly(true);
+        this.refresh_cookie.setMaxAge(24 * 60 * 60 * 7);
         response.addCookie(this.refresh_cookie);
     }
 }

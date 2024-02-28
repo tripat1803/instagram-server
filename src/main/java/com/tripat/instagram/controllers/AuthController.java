@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tripat.instagram.models.User;
 import com.tripat.instagram.repositories.UserRepository;
 import com.tripat.instagram.services.JwtService;
+import com.tripat.instagram.services.TokenService;
 import com.tripat.instagram.utils.AuthenticationRequest;
 import com.tripat.instagram.utils.AuthenticationResponse;
 import com.tripat.instagram.utils.RegisterRequest;
@@ -35,6 +36,7 @@ public class AuthController {
     PasswordEncoder passwordEncoder;
     @Autowired
     AuthenticationManager authenticationManager;
+    @Autowired TokenService tokenService;
 
     @PostMapping("/register")
     ResponseEntity<?> registerUser(@RequestBody RegisterRequest request, HttpServletResponse response) {
@@ -49,6 +51,7 @@ public class AuthController {
         User savedUser = this.userRepository.save(user);
         String access_token = jwtService.getnerateAccessToken(savedUser);
         String refresh_token = jwtService.getnerateRefreshToken(savedUser);
+        this.tokenService.saveUserToken(savedUser, refresh_token);
         AuthenticationResponse res = new AuthenticationResponse(access_token, refresh_token, response);
         return ResponseEntity.ok(res);
     }
@@ -60,6 +63,7 @@ public class AuthController {
         User user = this.userRepository.findFirstByEmail(request.email);
         String access_token = jwtService.getnerateAccessToken(user);
         String refresh_token = jwtService.getnerateRefreshToken(user);
+        this.tokenService.saveUserToken(user, refresh_token);
         AuthenticationResponse res = new AuthenticationResponse(access_token, refresh_token, response);
         return ResponseEntity.ok(res);
     }
