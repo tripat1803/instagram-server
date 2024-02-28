@@ -20,7 +20,7 @@ public class ApplicationConfig {
     @Autowired UserRepository userRepository;
 
     @Bean
-    public UserDetailsService userDetailsService(){
+    UserDetailsService userDetailsService(){
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username){
