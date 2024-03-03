@@ -1,8 +1,8 @@
 package com.tripat.instagram.models;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,8 +26,7 @@ public class User implements UserDetails {
     @GeneratedValue(generator = "gen")
     private Long id;
     @Column(unique = true)
-    private String username;
-    
+    private String alias;
     @Column(unique = true)
     private String email;
     private String firstname;
@@ -43,8 +42,8 @@ public class User implements UserDetails {
         
     }
 
-    public User(String username, String email, String firstname, String lastname, String bio, String profile, String mobile, String password, Role role){
-        this.username = username;
+    public User(String alias, String email, String firstname, String lastname, String bio, String profile, String mobile, String password, Role role){
+        this.alias = alias;
         this.email = email;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -55,8 +54,11 @@ public class User implements UserDetails {
         this.role = role;
     }
     
-    public void setUsername(String username) {
-        this.username = username;
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+    public String getAlias() {
+        return this.alias;
     }
 
     public String getEmail() {
@@ -121,7 +123,9 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Stream.of(Role.values()).map(role -> new SimpleGrantedAuthority(role.name())).collect(Collectors.toList());
+        List<SimpleGrantedAuthority> list = new ArrayList<SimpleGrantedAuthority>();
+        list.add(new SimpleGrantedAuthority(this.role.name()));
+        return list;
     }
 
     @Override

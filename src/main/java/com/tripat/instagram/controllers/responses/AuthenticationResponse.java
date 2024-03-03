@@ -1,4 +1,4 @@
-package com.tripat.instagram.utils;
+package com.tripat.instagram.controllers.responses;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;

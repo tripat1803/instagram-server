@@ -18,4 +18,10 @@ public class UserController {
         Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
         return ResponseEntity.ok(authentication.getPrincipal());
     }
+
+    @GetMapping("/refresh")
+    ResponseEntity<?> refreshUserToken(){
+        
+        return ResponseEntity.ok("");
+    }
 }
