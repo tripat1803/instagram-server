@@ -12,7 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.tripat.instagram.utils.JwtFilter;
+import com.tripat.instagram.filters.JwtFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -21,6 +21,8 @@ public class SecurityConfig {
     private final String[] WHITE_LIST_URLS = {
         "/api/auth",
         "/api/auth/**",
+        "/api/upload",
+        "/api/upload/**",
     };
     @Autowired JwtFilter jwtFilter;
     @Autowired AuthenticationProvider authProvider;

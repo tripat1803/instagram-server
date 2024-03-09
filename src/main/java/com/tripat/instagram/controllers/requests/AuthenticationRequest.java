@@ -1,4 +1,4 @@
-package com.tripat.instagram.controllers.responses;
+package com.tripat.instagram.controllers.requests;
 
 public class AuthenticationRequest {
     public String email;

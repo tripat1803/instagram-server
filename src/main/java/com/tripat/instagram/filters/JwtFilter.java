@@ -1,4 +1,4 @@
-package com.tripat.instagram.utils;
+package com.tripat.instagram.filters;
 
 import java.io.IOException;
 
@@ -29,6 +29,10 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        if(request.getServletPath().contains("/api/upload")){
+            filterChain.doFilter(request, response);
+            return;
+        }
         if(request.getServletPath().contains("/api/auth")){
             filterChain.doFilter(request, response);
             return;

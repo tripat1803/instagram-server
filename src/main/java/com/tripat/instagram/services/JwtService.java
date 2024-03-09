@@ -13,9 +13,9 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
-    private String secret = "ODRmMmU1MjgyY2FjYmNmZWMzYzRmNzg0MDg0OGI4ZWY=";
-    private long expiration = 86400000;
-    private long refreshExpiration = 604800000;
+    private final String secret = "ODRmMmU1MjgyY2FjYmNmZWMzYzRmNzg0MDg0OGI4ZWY=";
+    private final long expiration = 86400000;
+    private final long refreshExpiration = 604800000;
 
     public String extractUsername(String token){
         Claims claims = extractAllClaims(token);
@@ -35,7 +35,7 @@ public class JwtService {
         return claimsResolver.apply(claim);
     }
 
-    public String getnerateAccessToken(UserDetails userDetails){
+    public String generateAccessToken(UserDetails userDetails){
         return generateToken(userDetails, expiration);
     }
     

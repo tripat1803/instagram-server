@@ -21,4 +21,14 @@ public class TokenService {
         }
         this.tokenRepository.save(userToken);
     }
+
+    // public Token getUserToken(String token){
+    //     Token userToken = this.tokenRepository.findFirstByUser(user);
+    //     if(userToken != null){
+    //         userToken.setRefreshToken(token);
+    //     } else {
+    //         userToken = new Token(token, null, user);
+    //     }
+    //     this.tokenRepository.save(userToken);
+    // }
 }
