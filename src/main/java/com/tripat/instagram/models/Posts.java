@@ -2,7 +2,9 @@ package com.tripat.instagram.models;
 
 import java.util.List;
 
-import com.tripat.instagram.utils.Image;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.tripat.instagram.utils.embeddables.Image;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
@@ -14,9 +16,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "_posts")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Posts {
     @Id
     @GeneratedValue(generator = "gen")
@@ -35,16 +45,16 @@ public class Posts {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonBackReference
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<PostLikes> postLikes;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<PostComments> postComments;
-
-    public Posts() {
-    }
 
     public Posts(Image image, String description, Boolean enableComments, Boolean enableLikeandViewsCount,
             String city, String state, String postalCode, String country, User user) {
@@ -57,84 +67,5 @@ public class Posts {
         this.postalCode = postalCode;
         this.country = country;
         this.user = user;
-    }
-
-    public void setLikes(long data){
-        this.likes = data;
-    }
-    public void setViews(long data){
-        this.views = data;
-    }
-    public void setImageUrl(Image image) {
-        this.image = image;
-    }
-    public void setDescription(String description){
-        this.description = description;
-    }
-    public void setCity(String city){
-        this.city = city;
-    }
-    public void setState(String state){
-        this.state = state;
-    }
-    public void setPostalCode(String postalCode){
-        this.postalCode = postalCode;
-    }
-    public void setCountry(String country){
-        this.country = country;
-    }
-    public void setEnableComments(Boolean enableComments){
-        this.enableComments = enableComments;
-    }
-    public void setEnableLikeAndViewsCount(Boolean enableLikeAndViewsCount){
-        this.enableLikeandViewsCount = enableLikeAndViewsCount;
-    }
-    public void setPostLikes(List<PostLikes> postlikes){
-        this.postLikes = postlikes;
-    }
-    public void setPostComments(List<PostComments> postComments){
-        this.postComments = postComments;
-    }
-    public void setUser(User user){
-        this.user = user;
-    }
-    public Image getImageUrl() {
-        return this.image;
-    }
-    public String getDescription(){
-        return this.description;
-    }
-    public String getCity(){
-        return this.city;
-    }
-    public String getState(){
-        return this.state;
-    }
-    public String getPostalCode(){
-        return this.postalCode;
-    }
-    public String getCountry(){
-        return this.country;
-    }
-    public Boolean getEnableComments(){
-        return this.enableComments;
-    }
-    public Boolean getEnableLikeAndViewsCount(){
-        return this.enableLikeandViewsCount;
-    }
-    public Long getLikes(){
-        return this.likes;
-    }
-    public Long getViews(){
-        return this.views;
-    }
-    public List<PostLikes> getPostLikes(){
-        return this.postLikes;
-    }
-    public List<PostComments> getPostComments(){
-        return this.postComments;
-    }
-    public User getUser(){
-        return this.user;
     }
 }

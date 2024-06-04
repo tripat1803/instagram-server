@@ -14,28 +14,31 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "_post_likes")
+@Table(name = "_user_relationship")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class PostLikes {
+public class UserRelationship {
     @Id
     @GeneratedValue(generator = "gen")
     private Long id;
+    private boolean isCloseFriend = false;
+    private boolean isGuardian = false;
+    private boolean isBestie = false;
+    private boolean isFollowedBy = false;
+    private boolean isFollowing = false;
+    private boolean isBlocked = false;
+    private boolean isIncomingRequest = false;
+    private boolean isOutgoingRequest = false;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;
-    
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    @JsonBackReference
-    private Posts post;
 
-    public PostLikes(User user, Posts post){
-        this.user = user;
-        this.post = post;
-    }
+    @ManyToOne
+    @JoinColumn(name = "relation_with_id")
+    @JsonBackReference
+    private User relationWith;
 }

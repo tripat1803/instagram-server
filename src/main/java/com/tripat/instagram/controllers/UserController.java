@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tripat.instagram.controllers.responses.UserResponse;
 import com.tripat.instagram.models.User;
+import com.tripat.instagram.repositories.UserRepository;
 import com.tripat.instagram.services.JwtService;
 import com.tripat.instagram.services.TokenService;
 
@@ -24,11 +25,14 @@ public class UserController {
 
     @Autowired
     TokenService tokenService;
+
+    @Autowired
+    UserRepository userRepository;
     
     @GetMapping("/")
     ResponseEntity<?> getUser(){
         Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
-        UserResponse res = new UserResponse((User) authentication.getPrincipal());
+        UserResponse res = new UserResponse((User) authentication.getPrincipal(), null);
         return ResponseEntity.ok(res);
     }
 }

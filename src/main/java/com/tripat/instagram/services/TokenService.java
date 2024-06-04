@@ -15,7 +15,7 @@ public class TokenService {
     public void saveUserToken(User user, String token){
         Token userToken = this.tokenRepository.findFirstByUser(user);
         if(userToken != null){
-            userToken.setRefreshToken(token);
+            userToken.setRefresh_token(token);
         } else {
             userToken = new Token(token, null, user);
         }

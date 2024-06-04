@@ -1,11 +1,19 @@
 package com.tripat.instagram.models;
 
+import java.util.Date;
 import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.tripat.instagram.utils.NotificationType;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -18,34 +26,39 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "_post_comments")
+@Table(name = "_notifications")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class PostComments {
+public class Notification {
     @Id
     @GeneratedValue(generator = "gen")
     private Long id;
-    private String comment;
-    private Long subComments = 0l;
-
-    @ManyToOne
-    @JoinColumn(name = "parent_id")
-    @JsonBackReference
-    private PostComments parent;
     
+    @ManyToOne
+    @JoinColumn(name = "receiver_id")
+    @JsonBackReference
+    private User receiver;
+
+    @Enumerated(EnumType.STRING)
+    private NotificationType type;
+
+    private String message;
+
+    @CreationTimestamp
+    private Date createdAt;
+
+    @UpdateTimestamp
+    private Date updatedAt;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    @JsonBackReference
-    private Posts post;
-
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "link_id")
     @JsonManagedReference
-    private List<PostComments> postComments;
+    private List<NotificationLinks> links;
 }

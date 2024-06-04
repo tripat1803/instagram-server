@@ -8,8 +8,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.tripat.instagram.utils.Image;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tripat.instagram.utils.Role;
+import com.tripat.instagram.utils.embeddables.Image;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -22,9 +23,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "_users")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User implements UserDetails {
     @Id
     @Column(unique = true, nullable = false)
@@ -43,133 +52,39 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
-    private boolean isAccountPrivate = true;
+    private boolean isAccountPublic = false;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Token token;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Posts> posts;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<PostLikes> postLikes;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<PostComments> postComments; 
 
-    public User(){
-        
-    }
-
-    public User(String alias, String email, String firstname, String lastname, String bio, Image profile, String mobile, String password, Role role, boolean isAccountPrivate){
-        this.alias = alias;
-        this.email = email;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.bio = bio;
-        this.profile = profile;
-        this.mobile = mobile;
-        this.password = password;
-        this.role = role;
-        this.isAccountPrivate = isAccountPrivate;
-    }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Notification> notificationsOutgoing;
     
-    public void setAlias(String alias) {
-        this.alias = alias;
-    }
-    public String getAlias() {
-        return this.alias;
-    }
-    public void setAccountPrivate(boolean isAccountPrivate) {
-        this.isAccountPrivate = isAccountPrivate;
-    }
-    public Boolean getAccountPrivate() {
-        return this.isAccountPrivate;
-    }
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Notification> notificationsIncoming;
 
-    public String getEmail() {
-        return email;
-    }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @JsonManagedReference
+    private List<UserRelationship> relationships;
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    public void setPostLikes(List<PostLikes> postlikes){
-        this.postLikes = postlikes;
-    }
-
-    public void setPosts(List<Posts> posts){
-        this.posts = posts;
-    }
-    
-    public void setPostComments(List<PostComments> postComments){
-        this.postComments = postComments;
-    }
-
-    public List<Posts> getPosts(){
-        return this.posts;
-    }
-
-    public List<PostLikes> getPostLikes(){
-        return this.postLikes;
-    }
-
-    public List<PostComments> getPostComments(){
-        return this.postComments;
-    }
-
-    public Image getProfile() {
-        return this.profile;
-    }
-
-    public void setProfile(Image profile) {
-        this.profile = profile;
-    }
-
-    public String getMobile() {
-        return this.mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Role getRole() {
-        return this.role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
+    @OneToMany(mappedBy = "relationWith", cascade = CascadeType.REMOVE)
+    @JsonManagedReference
+    private List<UserRelationship> involvedWith;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
